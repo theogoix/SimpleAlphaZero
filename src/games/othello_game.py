@@ -1,9 +1,19 @@
+# %%
+
+import numpy as np
 from games.game import Game
 from games.othello_action import OthelloAction
 from games.othello_state import OthelloState
 
 class OthelloGame(Game):
-    
+
+    def get_initial_state(self) -> OthelloState:
+        board = np.zeros((8, 8), dtype=int)
+        # Set up initial four discs in the center
+        board[3, 3] = board[4, 4] = -1  # White discs
+        board[3, 4] = board[4, 3] = 1   # Black discs
+        current_player = 1  # Black starts
+        return OthelloState(board, current_player)
     
     
     def parse_move(self, move_str: str) -> OthelloAction:
@@ -17,7 +27,8 @@ class OthelloGame(Game):
 
     def play_interactive_game(self):
         state = self.get_initial_state()
-        while not state.is_terminal():
+        stop = False
+        while not (stop or state.is_terminal()):
             state.render(show_valid_moves=True)
             current_player = 'Black' if state.get_current_player() == 1 else 'White'
             print(f"{current_player}'s turn.")
@@ -30,6 +41,9 @@ class OthelloGame(Game):
             while not move_made:
                 try:
                     move_input = input("Enter your move (e.g., 'd3') or 'pass': ")
+                    if move_input.lower() == 'stop':
+                        stop = True
+                        break
                     action = self.parse_move(move_input)
                     if action not in valid_actions:
                         print("Invalid move. Try again.")
@@ -47,3 +61,5 @@ class OthelloGame(Game):
             print("White wins!")
         else:
             print("It's a draw!")
+
+# %%

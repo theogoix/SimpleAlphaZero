@@ -16,7 +16,7 @@ class OthelloState(GameState):
         return self.current_player
 
     def get_valid_actions(self) -> List[OthelloAction]:
-        valid_actions = []
+        valid_actions = [OthelloAction(row=2,col=1)]
         # Implement logic to find valid moves
         # For each cell, check if placing a disc results in flipping opponent's discs
 
