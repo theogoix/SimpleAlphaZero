@@ -6,10 +6,11 @@ from typing import List
 
 
 class OthelloState(GameState):
-    def __init__(self, board: np.ndarray, current_player: int):
-        self.board = board
+    def __init__(self, board: np.ndarray, current_player: int, passes: int = 0):
+        self.board = board.copy()
         self.current_player = current_player
-        self.passes = 0
+        self.passes = passes
+
 
     def get_current_player(self) -> int:
         return self.current_player
@@ -55,8 +56,26 @@ class OthelloState(GameState):
             return 0.0  # Draw
 
 
-    def render(self) -> str:
-        # Implement logic to render the board as a string
-        pass
+    def render(self, show_valid_moves=False):
+        board_str = '  a  b  c  d  e  f  g  h\n'
+        valid_moves = []
+        if show_valid_moves:
+            valid_moves = [(action.row, action.col) for action in self.get_valid_actions() if not action.is_pass]
+
+        for row in range(8):
+            board_str += str(row + 1)  # Row numbers
+            for col in range(8):
+                cell = self.board[row, col]
+                if (row, col) in valid_moves:
+                    board_str += ' * '  # Indicate valid move
+                elif cell == 1:
+                    board_str += ' B '
+                elif cell == -1:
+                    board_str += ' W '
+                else:
+                    board_str += ' . '
+            board_str += '\n'
+        print(board_str)
+
 
 # %%
