@@ -63,7 +63,7 @@ class OthelloGame(Game):
         if render:
             state.render()
             print(state.get_reward())
-        return history
+        return state.get_reward()
 
     def play_interactive_game(self):
         state = self.get_initial_state()
@@ -104,9 +104,26 @@ class OthelloGame(Game):
 
 # %%
 from agents.random_agent import RandomAgent, HumanAgent
+from agents.minimax import MinimaxAgent
 
 game = OthelloGame()
 human_agent = HumanAgent()
-random_agent = RandomAgent(seed=42)
-game.play_game_with_agents(random_agent,random_agent)
+random_agent = RandomAgent(seed=39)
+minimax_agent = MinimaxAgent(depth=4)
+first_win = 0
+second_win = 0
+draws = 0
+for i in range(3):
+    if i%2 == 0:
+        result = game.play_game_with_agents(minimax_agent,random_agent,render=False)
+    else:
+        result = - game.play_game_with_agents(random_agent,minimax_agent,render=False)
+    if result == 0:
+        draws += 1
+    elif result == 1:
+        first_win += 1
+    else:
+        second_win += 1
+    
+print(f"{first_win=}, {draws=}, {second_win=}")
 # %%

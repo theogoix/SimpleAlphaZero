@@ -2,6 +2,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Any
 
+from games.action import Action
+
 class GameState(ABC):
 
     @abstractmethod
@@ -9,7 +11,7 @@ class GameState(ABC):
         pass
 
     @abstractmethod
-    def get_valid_actions(self) -> List[Any]:
+    def get_valid_actions(self) -> List[Action]:
         pass
 
     @abstractmethod
