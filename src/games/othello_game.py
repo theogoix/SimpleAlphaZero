@@ -11,6 +11,11 @@ from games.othello_state import OthelloState
 
 class OthelloGame(Game):
 
+    def __init__(self,rng_seed=42):
+        self.state = self.get_initial_state()
+        self.rng = np.random.default_rng(seed=rng_seed)
+        self.history: list[OthelloState] = []
+
     def get_initial_state(self) -> OthelloState:
         board = np.zeros((8, 8), dtype=int)
         # Set up initial four discs in the center
@@ -28,6 +33,22 @@ class OthelloGame(Game):
         col = ord(move_str[0]) - ord('a')
         row = int(move_str[1]) - 1
         return OthelloAction(row, col)
+
+
+    def play_random_game(self):
+        rng = np.random.default_rng(seed=42)
+        state = self.get_initial_state()
+        while not state.is_terminal():
+            #state.render(show_valid_moves=True)
+            self.history.append(state)
+            possible_moves = state.get_valid_actions()
+            chosen_action = rng.choice(possible_moves)
+            state = state.apply_action(chosen_action)
+        state.render(show_valid_moves=True)
+        print(state.get_reward())
+        return self.history
+
+
 
     def play_interactive_game(self):
         state = self.get_initial_state()
@@ -68,5 +89,5 @@ class OthelloGame(Game):
 
 # %%
 game = OthelloGame()
-game.play_interactive_game()
+game.play_random_game()
 # %%
