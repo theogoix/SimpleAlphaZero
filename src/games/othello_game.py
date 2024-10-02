@@ -8,13 +8,14 @@ import numpy as np
 from games.game import Game
 from games.othello_action import OthelloAction
 from games.othello_state import OthelloState
+from agents.agent import Agent
 
 class OthelloGame(Game):
 
     def __init__(self,rng_seed=42):
         self.state = self.get_initial_state()
         self.rng = np.random.default_rng(seed=rng_seed)
-        self.history: list[OthelloState] = []
+        self.history: list[OthelloState,OthelloAction] = []
 
     def get_initial_state(self) -> OthelloState:
         board = np.zeros((8, 8), dtype=int)
@@ -40,15 +41,29 @@ class OthelloGame(Game):
         state = self.get_initial_state()
         while not state.is_terminal():
             #state.render(show_valid_moves=True)
-            self.history.append(state)
+
             possible_moves = state.get_valid_actions()
             chosen_action = rng.choice(possible_moves)
+            self.history.append((state,chosen_action))
             state = state.apply_action(chosen_action)
         state.render(show_valid_moves=True)
         print(state.get_reward())
         return self.history
 
-
+    def play_game_with_agents(self,black_agent:Agent,white_agent:Agent,render=True) -> list[OthelloState,OthelloAction]:
+        state = self.get_initial_state()
+        move_count = 0
+        history = []
+        while not state.is_terminal():
+            agent = black_agent if move_count % 2 == 0 else white_agent
+            action_list = state.get_valid_actions()
+            chosen_action = agent.select_action(state=state, action_list=action_list)
+            history.append((state,chosen_action))
+            state = state.apply_action(chosen_action)
+        if render:
+            state.render()
+            print(state.get_reward())
+        return history
 
     def play_interactive_game(self):
         state = self.get_initial_state()
@@ -88,6 +103,10 @@ class OthelloGame(Game):
             print("It's a draw!")
 
 # %%
+from agents.random_agent import RandomAgent, HumanAgent
+
 game = OthelloGame()
-game.play_random_game()
+human_agent = HumanAgent()
+random_agent = RandomAgent(seed=42)
+game.play_game_with_agents(random_agent,random_agent)
 # %%

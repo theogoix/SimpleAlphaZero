@@ -26,5 +26,5 @@ class GameState(ABC):
         pass
 
     @abstractmethod
-    def render(self) -> str:
+    def render(self,show_valid_moves: bool=False) -> str:
         pass

@@ -18,6 +18,12 @@ class OthelloAction:
         else:
             return self.row * 8 + self.col  # Index for board positions
 
+    def to_string(self) -> str:
+        if self.is_pass:
+            return 'pass'
+        else:
+            return chr(ord('a') + self.col) + str(self.row + 1)
+
     @staticmethod
     def from_index(index: int) -> 'OthelloAction':
         if index == 64:
@@ -26,3 +32,5 @@ class OthelloAction:
             row = index // 8
             col = index % 8
             return OthelloAction(row, col)
+    
+
