@@ -1,4 +1,8 @@
 # %%
+import os
+os.chdir("..")
+
+# %%
 
 import numpy as np
 from games.game import Game
@@ -62,4 +66,7 @@ class OthelloGame(Game):
         else:
             print("It's a draw!")
 
+# %%
+game = OthelloGame()
+game.play_interactive_game()
 # %%
