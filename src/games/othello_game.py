@@ -105,15 +105,16 @@ class OthelloGame(Game):
 # %%
 from agents.random_agent import RandomAgent, HumanAgent
 from agents.minimax import MinimaxAgent
+from tqdm import tqdm
 
 game = OthelloGame()
 human_agent = HumanAgent()
-random_agent = RandomAgent(seed=39)
-minimax_agent = MinimaxAgent(depth=4)
+random_agent = RandomAgent(seed=35)
+minimax_agent = MinimaxAgent(depth=3)
 first_win = 0
 second_win = 0
 draws = 0
-for i in range(3):
+for i in tqdm(range(9)):
     if i%2 == 0:
         result = game.play_game_with_agents(minimax_agent,random_agent,render=False)
     else:
