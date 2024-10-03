@@ -122,10 +122,7 @@ class OthelloState(GameState):
         if self.board[action.row, action.col] != 0:
             raise ValueError(f"Cell ({action.row}, {action.col}) is not empty.")
 
-        # First, verify that the action is valid
-        valid_actions = self.get_valid_actions()
-        if action not in valid_actions:
-            raise ValueError(f"Action ({action.row}, {action.col}) is not a valid move.")
+
 
         # Create a copy of the board to apply changes
         new_board = self.board.copy()
@@ -156,6 +153,11 @@ class OthelloState(GameState):
                     break
                 r += dr
                 c += dc
+
+        # First, verify that the action is valid
+        if not flip_mask.any():
+            raise ValueError(f"Action ({action.row}, {action.col}) is not a valid move.")
+
 
         # Apply flipping using the mask
         new_board[flip_mask] = self.current_player

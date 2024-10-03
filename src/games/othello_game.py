@@ -60,6 +60,7 @@ class OthelloGame(Game):
             chosen_action = agent.select_action(state=state, action_list=action_list)
             history.append((state,chosen_action))
             state = state.apply_action(chosen_action)
+            move_count += 1
         if render:
             state.render()
             print(state.get_reward())
@@ -109,12 +110,12 @@ from tqdm import tqdm
 
 game = OthelloGame()
 human_agent = HumanAgent()
-random_agent = RandomAgent(seed=35)
-minimax_agent = MinimaxAgent(depth=3)
+random_agent = RandomAgent(seed=32)
+minimax_agent = MinimaxAgent(depth=5)
 first_win = 0
 second_win = 0
 draws = 0
-for i in tqdm(range(9)):
+for i in tqdm(range(0,19,2)):
     if i%2 == 0:
         result = game.play_game_with_agents(minimax_agent,random_agent,render=False)
     else:
@@ -128,3 +129,4 @@ for i in tqdm(range(9)):
     
 print(f"{first_win=}, {draws=}, {second_win=}")
 # %%
+game.play_game_with_agents(human_agent,minimax_agent)

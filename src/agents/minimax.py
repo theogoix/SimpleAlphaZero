@@ -16,9 +16,9 @@ class MinimaxAgent(Agent):
     @staticmethod
     def negamax(state: GameState, depth: int, alpha: float, beta: float, color, eval_func) -> Tuple[int, Action]:
         if state.is_terminal():
-            return color * state.get_current_player() * state.get_reward(), None
+            return state.get_current_player()  * state.get_reward(), None
         elif depth == 0:
-            return color * state.get_current_player() * eval_func(state), None
+            return state.get_current_player()  * eval_func(state), None
         
         max_score = -2
         best_action = None
